@@ -7,7 +7,7 @@ const __dirname = new URL(".", import.meta.url).pathname;
 
 const template = {
   schema: 3,
-  name: "@taskless/oss",
+  name: "core",
   version: "1.0.0",
   description:
     "Taskless core Telemetry. The core telemetry contains common monitoring and logging found in APM-like solutions, and is a solid baseline for any observability stack.",
