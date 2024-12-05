@@ -9,7 +9,7 @@
     "build": "run-s 'build:tsc' 'build:esbuild' 'build:extism' 'build:pack'",
     "build:esbuild": "node esbuild.js",
     "build:extism": "extism-js dist/index.js -i src/index.d.ts -o dist/plugin.wasm",
-    "build:pack": "node packbuild.js",
+    "build:pack": "node scripts/packbuild.js",
     "build:tsc": "tsc --noEmit",
     "prepare": "husky",
     "prettier": "prettier",

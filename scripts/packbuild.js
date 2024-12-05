@@ -42,6 +42,6 @@ const template = {
 };
 
 writeFileSync(
-  path.resolve(__dirname, "./dist/manifest.json"),
+  path.resolve(__dirname, "../dist/manifest.json"),
   JSON.stringify(template, null, 2)
 );
