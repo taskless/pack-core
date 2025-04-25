@@ -34,12 +34,12 @@ export interface Manifest {
      */
     environment?: string[];
     /**
-     * Whether this pack can access the request and response body
+     * [deprecated] Whether this pack can access the request and response body, always true
      */
     body?: boolean;
   };
   /**
-   * Default dashboard configurations for this pack
+   * [deprecated] Default dashboard configurations for this pack - see dashboards
    */
   displays?: {
     /**
@@ -100,4 +100,53 @@ export interface Manifest {
         default: boolean;
       }
   )[];
+  /**
+   * Charts available in this Pack
+   */
+  charts?: {
+    /**
+     * The title of the chart
+     */
+    title: string;
+    /**
+     * A short description of the chart
+     */
+    description?: string;
+    /**
+     * The type of the chart
+     */
+    type: "step" | "pie" | "table";
+    definition: {
+      /**
+       * Describes the aggregation funciton to use, usually expressed on the Y-axis
+       */
+      aggregate: {
+        [k: string]: string;
+      };
+      /**
+       * How should the data be grouped? Usually expressed on the X-axis
+       */
+      bucket: {
+        [k: string]: string;
+      };
+      /**
+       * The graph series
+       */
+      series?:
+        | {
+            query: string;
+          }
+        | {
+            dimension: string;
+            /**
+             * The type of data this is
+             */
+            dimensionType: "string" | "number";
+            /**
+             * The per-series query with optional placeholders
+             */
+            query: string;
+          };
+    };
+  }[];
 }

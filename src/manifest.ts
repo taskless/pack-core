@@ -53,4 +53,36 @@ export const manifest = {
       default: true,
     },
   ],
+  charts: [
+    {
+      type: "step",
+      title: "Response Time (p95)",
+      definition: {
+        bucket: { time: "HOUR" },
+        series: {
+          query: "core/domain = '%(dimension)s'",
+          dimension: "core/domain",
+          dimensionType: "string",
+        },
+        aggregate: { p95: "core/durationMs" },
+      },
+    },
+    {
+      type: "table",
+      title: "Calls per Domain",
+      definition: {
+        bucket: { dimension: "core/domain" },
+        aggregate: { count: "core/domain" },
+      },
+    },
+    {
+      type: "pie",
+      title: "Failures by Domain",
+      definition: {
+        bucket: { dimension: "core/domain" },
+        series: { query: "core/status >= 400" },
+        aggregate: { count: "core/domain" },
+      },
+    },
+  ],
 } satisfies Manifest;

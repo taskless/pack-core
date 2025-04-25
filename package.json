@@ -8,7 +8,7 @@
   "scripts": {
     "build": "run-s 'build:tsc' 'build:esbuild' 'build:extism' 'build:pack'",
     "build:esbuild": "node esbuild.js",
-    "build:extism": "extism-js dist/index.js -i src/index.d.ts -o dist/plugin.wasm",
+    "build:extism": "extism-js dist/index.js -i src/index.d.ts -o dist/pack.wasm",
     "build:pack": "tsx scripts/packbuild.ts",
     "build:tsc": "tsc --noEmit",
     "codegen": "tsx scripts/generate.ts",

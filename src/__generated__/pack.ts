@@ -34,7 +34,7 @@ export interface Pack {
      */
     environment?: string[];
     /**
-     * Whether this pack can access the request and response body
+     * [deprecated] Whether this pack can access the request and response body, always true
      */
     body?: boolean;
   };
