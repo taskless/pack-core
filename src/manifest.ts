@@ -1,9 +1,10 @@
+import pk from "../package.json" with { type: "json" };
 import { type Manifest } from "./__generated__/manifest.js";
 
 export const manifest = {
   schema: "pre2",
   name: "core",
-  version: "0.0.2",
+  version: pk.version,
   description:
     "Taskless core Telemetry. The core telemetry contains common monitoring and logging found in APM-like solutions, and is a solid baseline for any observability stack.",
   permissions: {
@@ -65,6 +66,19 @@ export const manifest = {
           dimensionType: "string",
         },
         aggregate: { p95: "core/durationMs" },
+      },
+    },
+    {
+      type: "step",
+      title: "Response Time (p99)",
+      definition: {
+        bucket: { time: "HOUR" },
+        series: {
+          query: "core/domain = '%(dimension)s'",
+          dimension: "core/domain",
+          dimensionType: "string",
+        },
+        aggregate: { p99: "core/durationMs" },
       },
     },
     {

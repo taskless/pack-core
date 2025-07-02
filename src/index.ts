@@ -20,16 +20,15 @@ type Context = {
   start: number;
 };
 
-type AnyResponse =
-  | undefined
-  | string
-  | {
-      error?: string;
-      message?: string;
-      err?: {
-        type?: string;
-      };
-    };
+type AnyJsonResponse = {
+  error?: string;
+  message?: string;
+  err?: {
+    type?: string;
+  };
+};
+
+type AnyResponse = undefined | string | AnyJsonResponse;
 
 const configuration = z
   .object({
@@ -55,32 +54,30 @@ export function pre() {
     return;
   }
 
-  const domain =
-    (userConfig?.enableDomain ??
+  const enableDomain =
+    userConfig?.enableDomain ??
     manifest.fields.find((f) => f.name === "enableDomain")?.default ??
-    true)
-      ? { domain: input.request.domain }
-      : {};
+    true;
+  const domain = enableDomain ? input.request.domain : undefined;
 
-  const url =
-    (userConfig?.enableUrl ??
+  const enableUrl =
+    userConfig?.enableUrl ??
     manifest.fields.find((f) => f.name === "enableUrl")?.default ??
-    true)
-      ? { url: input.request.url }
-      : {};
+    true;
+  const url = enableUrl ? input.request.url : undefined;
 
-  const path =
-    (userConfig?.enablePath ??
+  const enablePath =
+    userConfig?.enablePath ??
     manifest.fields.find((f) => f.name === "enablePath")?.default ??
-    true)
-      ? { path: input.request.path }
-      : {};
+    true;
+
+  const path = enablePath ? input.request.path : undefined;
 
   writeOutput<PluginOutput<Context>>({
     capture: {
-      ...domain,
-      ...url,
-      ...path,
+      domain,
+      url,
+      path,
     },
     context: {
       start: Date.now(),
@@ -107,7 +104,17 @@ export function post() {
 
   let seenError: string | undefined;
   if (input.response?.status && input.response.status >= 400) {
-    seenError = body?.error ?? body?.message ?? body?.err?.type;
+    if (typeof body === "string") {
+      try {
+        const parsedBody = JSON.parse(body) as AnyJsonResponse;
+        seenError =
+          parsedBody.error ?? parsedBody.message ?? parsedBody.err?.type;
+      } catch {
+        // noop, the body wasn't JSON
+      }
+    } else if (typeof body === "object" && body !== null) {
+      seenError = body?.error ?? body?.message ?? body?.err?.type;
+    }
   }
 
   const durationMs =
