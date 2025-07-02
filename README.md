@@ -1,21 +1,24 @@
-# Taskless Core Plugin
+# Taskless Packs: Core (Status, Duration, and Failure Detection)
 
-The Taskless Core plugin powers the Open Source [Taskless Loader](https://github.com/taskless/loader-js) and is the default pack most users use when starting with Taskless.
+> Taskless Packs are plugins that enable service-specific functionality in Taskless. To use this pack, you need to install it into your Taskless instance using either the [Taskless CLI](https://github.com/taskless/pack) or the [Taskless Cloud](https://www.taskless.io) interface.
 
-# What Are Packs?
+# Pack Overview
 
-Packs are WebAssembly binaries that expose one or more "hooks" to the host system. In the case of Taskless, these WebAssembly hooks must expose a `pre` and `post` method which operate on strings containing JSON.
+This pack replicates traditional APM functionality found in traditional APM tools, but with flexibility to customize the domains and endpoints that you want to monitor. It provides the following features:
 
-# Building Locally
+# Installation
 
-Taskless Packs are built as Extism plugins. This one is (currently) TypeScript based, and requires the Extism PDK to build.
+You can install this pack via Taskless Cloud, or via the Taskless CLI using the `pack.tgz` from the releases page.
 
-1. Follow the `js-pdk` instructions to install Extism's builder for JavaScript and TypeScript projects ([link](https://github.com/extism/js-pdk))
-2. Run `pnpm install` to install the development dependnecies
-3. Run `pnpm build` to build the plugin
+```bash
+# Taskless CLI
+pnpm dlx @taskless/pack@latest install "<url/to/pack.tgz>"
+```
 
-In the `dist` folder, you'll see the final JavaScript, along with a `plugin.wasm` file (the WebAssembly binary) and a `manifest.json` file that describes the plugin.
+# Configuration
 
-# Testing
+This pack has a variety of configuration options, with defaults for the most common use cases.
 
-This library uses [@taskless/packcheck](https://github.com/taskless/packcheck) to test the WebAssembly binary. To run the tests, run `pnpm test`.
+# FAQs
+
+- **What does this pack send?** This pack sends metadata about the status, duration, and failure of tasks. This includes the requested URL, the response code, the duration of the request, and a good-faith attempt to extract error data from some of the most common error formats (JSON via `.errors`, etc)
